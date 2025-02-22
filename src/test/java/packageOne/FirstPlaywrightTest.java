@@ -2,32 +2,49 @@ package packageOne;
 
 import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.junit.UsePlaywright;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import com.microsoft.playwright.Playwright;
 
+@UsePlaywright
+/* @UsePlaywright omogućava automatsko kreiranje i zatvaranje Playwright resursa (browser, page). Metode primaju Page page kao argument,
+jer Playwright ekstenzija automatski kreira i prosleđuje Page objekat. */
+
 public class FirstPlaywrightTest {
 
+/*    Ovo je zastareli metod
+    Playwright playwright;
+    Browser browser;
+    Page page;
+
+    @BeforeEach
+    void setUp(){
+        playwright = Playwright.create();
+        browser = playwright.chromium().launch();
+        page = browser.newPage();
+    }
+
+    @AfterEach
+    void teardown(){
+        browser.close();
+        playwright.close();
+    }
+*/
     @Test
-    void shouldShowThePageTitle(){
-        Playwright playwright = Playwright.create();
-        Browser browser = playwright.chromium().launch();
-        Page page = browser.newPage();
+    void shouldShowThePageTitle(Page page){
 
         page.navigate("https://practicesoftwaretesting.com/");
         String title = page.title();
 
         Assertions.assertTrue(title.contains("Practice Software Testing"));
 
-        browser.close();
-        playwright.close();
     }
 
     @Test
-    void shouldSearchByKeywords(){
-        Playwright playwright = Playwright.create();
-        Browser browser = playwright.chromium().launch();
-        Page page = browser.newPage();
+    void shouldSearchByKeywords(Page page){
 
         page.navigate("https://practicesoftwaretesting.com/");
 
@@ -45,7 +62,5 @@ public class FirstPlaywrightTest {
 
         Assertions.assertTrue(matchingSearchResult > 0);
 
-        browser.close();
-        playwright.close();
     }
 }
