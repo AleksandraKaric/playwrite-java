@@ -15,21 +15,23 @@ import java.util.regex.Pattern;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
-
+@UsePlaywright(HeadlessChromeOptions.class)
 public class AddingItemsToTheCartTest {
 
+   /* ovo više ne treba jer koristimo @UsePlaywright anotaciju
     protected static Playwright playwright;
     protected static Browser browser;
     protected static BrowserContext browserContext;
 
     Page page;
-
     @BeforeAll
+
     static void setUpBrowser(){
         playwright = Playwright.create();
         browser = playwright.chromium().launch(
-                new BrowserType.LaunchOptions().setHeadless(false)
-                        .setArgs(Arrays.asList("--no-sandbox","--disable-gpu"))
+                new BrowserType.LaunchOptions()
+                        .setHeadless(false)
+                        .setArgs(Arrays.asList("--no-sandbox","--disable-extensions","--disable-gpu"))
         );
     }
 
@@ -49,11 +51,11 @@ public class AddingItemsToTheCartTest {
         browser.close();
         playwright.close();
     }
-
+*/
 
     @DisplayName("Search for pliers")
     @Test
-    void searchForPliers(){
+    void searchForPliers(Page page){
         page.navigate("https://practicesoftwaretesting.com");
         page.getByPlaceholder("Search").fill("Pliers");
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Search")).click();

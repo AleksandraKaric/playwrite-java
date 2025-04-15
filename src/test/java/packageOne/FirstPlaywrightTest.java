@@ -1,40 +1,42 @@
 package packageOne;
 
-import com.microsoft.playwright.Browser;
-import com.microsoft.playwright.Page;
+import com.microsoft.playwright.*;
 import com.microsoft.playwright.junit.UsePlaywright;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import com.microsoft.playwright.Playwright;
+import org.junit.jupiter.api.*;
 
-@UsePlaywright
-/* @UsePlaywright omogućava automatsko kreiranje i zatvaranje Playwright resursa (browser, page). Metode primaju Page page kao argument,
-jer Playwright ekstenzija automatski kreira i prosleđuje Page objekat. */
+import java.util.Arrays;
+
 
 public class FirstPlaywrightTest {
 
-/*    Ovo je zastareli metod
-    Playwright playwright;
-    Browser browser;
+    private static Playwright playwright;
+    private static Browser browser;
+    private static BrowserContext browserContext;
     Page page;
 
-    @BeforeEach
-    void setUp(){
+    @BeforeAll
+    public static void setUpBrowser(){
         playwright = Playwright.create();
-        browser = playwright.chromium().launch();
-        page = browser.newPage();
+        browser = playwright.chromium().launch(
+                new BrowserType.LaunchOptions()
+                        .setHeadless(false)
+                        .setArgs(Arrays.asList("--no sandbox","--disable extensions","--no gpu"))
+        );
+        browserContext = browser.newContext();
     }
 
-    @AfterEach
-    void teardown(){
+    @BeforeEach
+    public void setUp(){
+        page = browserContext.newPage();
+    }
+
+    @AfterAll
+    public static void tearDown(){
         browser.close();
         playwright.close();
     }
-*/
     @Test
-    void shouldShowThePageTitle(Page page){
+    void shouldShowThePageTitle(){
 
         page.navigate("https://practicesoftwaretesting.com/");
         String title = page.title();
@@ -44,7 +46,7 @@ public class FirstPlaywrightTest {
     }
 
     @Test
-    void shouldSearchByKeywords(Page page){
+    void shouldSearchByKeywords(){
 
         page.navigate("https://practicesoftwaretesting.com/");
 
